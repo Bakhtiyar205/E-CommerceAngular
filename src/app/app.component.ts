@@ -18,9 +18,9 @@ export class AppComponent {
   }
 }
 
-$.get("http://localhost:5193/Product/id?id=07490583-684f-481d-9aa5-0601dc8d7b9a",(data: any) => {
-  console.log(data);
-});
+// $.get("http://localhost:5193/Product/id?id=07490583-684f-481d-9aa5-0601dc8d7b9a",(data: any) => {
+//   console.log(data);
+// });
 // $(document).ready(()=>{
 //   alert("salam")
 // })
