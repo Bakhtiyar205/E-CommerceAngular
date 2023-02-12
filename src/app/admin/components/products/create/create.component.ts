@@ -31,7 +31,25 @@ export class CreateComponent extends BaseComponent implements OnInit {
     const create_product = new ProductCreate();
     create_product.name = name.value;
     create_product.price = parseFloat(price.value);
-    create_product.stock = parseInt(stock.value)
+    create_product.stock = parseInt(stock.value);
+
+    if(!name.value){
+      this.alertify.message("Please add product name",{
+        dismissOthers: true,
+        messageType: MessageType.Success,
+        position: Position.BottomRight
+      })
+      return
+    }
+
+    if(parseInt(stock.value)<0){
+      this.alertify.message("Please add positive number",{
+        dismissOthers: true,
+        messageType: MessageType.Success,
+        position: Position.BottomRight
+      })
+      return
+    }
     
     
     this.productService.create(create_product, () => {
