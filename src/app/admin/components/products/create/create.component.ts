@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 //Components
@@ -26,12 +26,16 @@ export class CreateComponent extends BaseComponent implements OnInit {
     
   }
 
+  @Output() createdProduct: EventEmitter<ProductCreate> = new EventEmitter();
+
+
   create(name: HTMLInputElement, stock: HTMLInputElement, price: HTMLInputElement){
     this.showSpinner(SpinnerType.BallAtom)
     const create_product = new ProductCreate();
     create_product.name = name.value;
     create_product.price = parseFloat(price.value);
     create_product.stock = parseInt(stock.value);
+
 
     if(!name.value){
       this.alertify.message("Please add product name",{
@@ -49,9 +53,9 @@ export class CreateComponent extends BaseComponent implements OnInit {
         position: Position.BottomRight
       })
       return
+
     }
-    
-    
+
     this.productService.create(create_product, () => {
       this.hideSpinner(SpinnerType.BallAtom);
       this.alertify.message("Product is added",{
@@ -67,5 +71,7 @@ export class CreateComponent extends BaseComponent implements OnInit {
         position: Position.TopRight
       })
     });
+
+    this.createdProduct.emit(create_product);
   }
 }

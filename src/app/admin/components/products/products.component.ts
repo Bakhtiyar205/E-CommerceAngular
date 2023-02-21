@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent, SpinnerType } from 'src/app/base/base.component';
 import { ProductCreate } from 'src/app/contracts/product_create';
 import { HttpClientService } from 'src/app/services/common/http-client.service';
+import { ListComponent } from './list/list.component';
 
 @Component({
   selector: 'app-products',
@@ -57,5 +58,12 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     // this.httpClientService.delete({
     //   controller: "product"
     // },"7a4c959d-d3e2-49f9-9712-08db0c651854").subscribe();
+  }
+
+  @ViewChild(ListComponent) listComponents? : ListComponent;
+
+  createdProduct(createdProdcut: ProductCreate){
+    console.log(this.listComponents?.getProducts())
+    this.listComponents?.getProducts();
   }
 }
