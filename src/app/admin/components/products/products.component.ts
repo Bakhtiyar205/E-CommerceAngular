@@ -15,7 +15,13 @@ export class ProductsComponent extends BaseComponent implements OnInit {
   constructor(spinner: NgxSpinnerService, private httpClientService: HttpClientService){
     super(spinner);
   }
-  
+
+  @ViewChild(ListComponent) listComponents? : ListComponent;
+
+  async createdProduct(createdProdcut: ProductCreate){
+    console.log(this.listComponents)
+    await this.listComponents?.getProducts();
+  }
   ngOnInit(): void {
     // this.showSpinner(SpinnerType.BallAtom);
     // this.httpClientService.get<ProductCreate[]>({
@@ -60,10 +66,6 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     // },"7a4c959d-d3e2-49f9-9712-08db0c651854").subscribe();
   }
 
-  @ViewChild(ListComponent) listComponents? : ListComponent;
-
-  createdProduct(createdProdcut: ProductCreate){
-    console.log(this.listComponents?.getProducts())
-    this.listComponents?.getProducts();
-  }
+  
+ 
 }

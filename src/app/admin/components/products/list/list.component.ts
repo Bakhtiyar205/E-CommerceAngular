@@ -8,6 +8,7 @@ import { ProductService } from 'src/app/services/common/models/product.service';
 //Table
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import { HtmlParser, HtmlTagDefinition } from '@angular/compiler';
 
 @Component({
   selector: 'app-list',
@@ -27,9 +28,13 @@ constructor(spinner: NgxSpinnerService,private productService: ProductService, p
 
 
 
-displayedColumns: string[] = ['name', 'stock', 'price', 'createdDate', 'updateDate'];
+displayedColumns: string[] = ['name', 'stock', 'price', 'createdDate', 'updateDate', 'update' ,'delete'];
 dataSource : MatTableDataSource<List_Product>= new MatTableDataSource<List_Product>();
 
+// delete(id: string, event: any){
+//   const img: HTMLImageElement = event.srcElement;
+  
+// }
 
 async getProducts(){
   this.showSpinner(SpinnerType.BallAtom);
@@ -43,7 +48,9 @@ async getProducts(){
      if(this.paginator){
 
      }
-    //  this.paginator?.length = allProducts?.totalCount
+     if(this.paginator){
+       this.paginator.length = allProducts?.totalCount ?? 0
+     }
 }
 
 async pageChanged(){
