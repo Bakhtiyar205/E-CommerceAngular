@@ -28,4 +28,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Used Libraries
 
-Jquery(it is not recommended), AlertifyJs, ToastrJs, NgxSpinner, Bootstrap
+Jquery(it is not recommended), AlertifyJs, ToastrJs, NgxSpinner, Bootstrap, Ngx File Drop

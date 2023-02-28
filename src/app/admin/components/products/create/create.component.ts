@@ -7,6 +7,7 @@ import {BaseComponent, SpinnerType} from "src/app/base/base.component"
 //Service and Models
 import { ProductCreate } from 'src/app/contracts/product_create';
 import { AlertifyService, MessageType, Position } from 'src/app/services/admin/alertify.service';
+import { FileUploadComponent, FileUploadOptions } from 'src/app/services/common/file-upload/file-upload.component';
 import { ProductService } from 'src/app/services/common/models/product.service';
 
 
@@ -26,8 +27,16 @@ export class CreateComponent extends BaseComponent implements OnInit {
     
   }
 
-  @Output() createdProduct: EventEmitter<ProductCreate> = new EventEmitter();
 
+
+  @Output() createdProduct: EventEmitter<ProductCreate> = new EventEmitter();
+  @Output()fileUploadOptions: Partial<FileUploadOptions> = {
+    action: "upload",
+    controller: "product",
+    explanation: "Choose the images",
+    isAdminPage: true,
+    accept: ".png, .jpg, .jpeg"
+  };
 
   create(name: HTMLInputElement, stock: HTMLInputElement, price: HTMLInputElement){
     this.showSpinner(SpinnerType.BallAtom)
