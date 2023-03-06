@@ -5,6 +5,7 @@ import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { FileUploadDialogComponent, FileUploadState} from 'src/app/dialogs/file-upload-dialog/file-upload-dialog/file-upload-dialog.component';
 import { AlertifyService, MessageType, Position } from '../../admin/alertify.service';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from '../../ui/custom-toastr.service';
+import { DialogService } from '../dialog.service';
 import { HttpClientService } from '../http-client.service';
 
 @Component({
@@ -17,7 +18,8 @@ export class FileUploadComponent {
     private httpCustomService: HttpClientService,
     private alertifyService: AlertifyService,
     private customToasterService: CustomToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) {
 
   }
@@ -35,61 +37,54 @@ export class FileUploadComponent {
       })
     }
 
-    this.openDialog(()=>{
-      
+    this.dialogService.openDialog({
+      componentType: FileUploadDialogComponent,
+      data: FileUploadState.Yes,
+      afterClosed: () => {
+        this.httpCustomService.post({
+          controller: this.options?.controller,
+          action: this.options?.action,
+          queryString: this.options?.queryString,
+          headers: new HttpHeaders({ "responseType": "blob" })
+        }, fileData).subscribe(data => {
+    
+          const message: string = "Datas uploaded successfully"
+    
+          if (this.options?.isAdminPage) {
+            this.alertifyService.message(message,{
+              dismissOthers: true,
+              messageType: MessageType.Success,
+              position: Position.TopRight
+            })
+          } else {
+            this.customToasterService.message(message,"Succesfully",{
+              messageType: ToastrMessageType.Success,
+              position: ToastrPosition.TopRight
+            })
+          }
+        }, (errorResponse: HttpErrorResponse) => {
+          const message: string = "Error happend while uploading the datas"
+    
+          if (this.options?.isAdminPage) {
+            this.alertifyService.message(message,{
+              dismissOthers: true,
+              messageType: MessageType.Warning,
+              position: Position.TopRight
+            })
+          } else {
+            this.customToasterService.message(message,"Error",{
+              messageType: ToastrMessageType.Warning,
+              position: ToastrPosition.TopRight
+            })
+          }
+        });
+      },
     })
 
-    this.httpCustomService.post({
-      controller: this.options?.controller,
-      action: this.options?.action,
-      queryString: this.options?.queryString,
-      headers: new HttpHeaders({ "responseType": "blob" })
-    }, fileData).subscribe(data => {
-
-      const message: string = "Datas uploaded successfully"
-
-      if (this.options?.isAdminPage) {
-        this.alertifyService.message(message,{
-          dismissOthers: true,
-          messageType: MessageType.Success,
-          position: Position.TopRight
-        })
-      } else {
-        this.customToasterService.message(message,"Succesfully",{
-          messageType: ToastrMessageType.Success,
-          position: ToastrPosition.TopRight
-        })
-      }
-    }, (errorResponse: HttpErrorResponse) => {
-      const message: string = "Error happend while uploading the datas"
-
-      if (this.options?.isAdminPage) {
-        this.alertifyService.message(message,{
-          dismissOthers: true,
-          messageType: MessageType.Warning,
-          position: Position.TopRight
-        })
-      } else {
-        this.customToasterService.message(message,"Error",{
-          messageType: ToastrMessageType.Warning,
-          position: ToastrPosition.TopRight
-        })
-      }
-    });
+    
   }
 
-  openDialog(afterClosed: any): void {
-    const dialogRef = this.dialog.open(FileUploadDialogComponent, {
-      width:'250px',
-      data: FileUploadState.Yes,
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result == FileUploadState.Yes){
-        afterClosed();
-      }
-    });
-  }
+  
 }
 
 export class FileUploadOptions {
